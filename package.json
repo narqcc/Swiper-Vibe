@@ -1,0 +1,21 @@
+{
+  "name": "image-swiper",
+  "version": "1.0.0",
+  "description": "A web app to swipe through images and save or discard them",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "image",
+    "swiper",
+    "vanilla-js",
+    "web-app"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}

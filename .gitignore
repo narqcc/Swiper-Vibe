@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+.env
+
+# Keep the directory structure but ignore the image contents
+images/*
+!images/.gitkeep
+saved/*
+!saved/.gitkeep
+discarded/*
+!discarded/.gitkeep
