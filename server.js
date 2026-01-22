@@ -7,6 +7,7 @@ const PORT = 3000;
 const IMAGES_DIR = path.join(__dirname, 'images');
 const SAVED_DIR = path.join(__dirname, 'saved');
 const DISCARDED_DIR = path.join(__dirname, 'discarded');
+const FAVORITES_DIR = path.join(__dirname, 'favorites');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
 // MIME types for different file extensions
@@ -88,6 +89,21 @@ async function undoMove(imagePath) {
     }
 }
 
+async function favoriteImage(imagePath) {
+    const sourcePath = path.join(IMAGES_DIR, imagePath);
+    const destPath = path.join(FAVORITES_DIR, imagePath);
+
+    try {
+        // Copy the image to favorites (don't move it)
+        await fs.copyFile(sourcePath, destPath);
+        console.log(`Copied ${imagePath} to favorites`);
+        return true;
+    } catch (error) {
+        console.error('Error copying image to favorites:', error);
+        return false;
+    }
+}
+
 async function serveFile(filePath, res) {
     try {
         const content = await fs.readFile(filePath);
@@ -163,6 +179,25 @@ async function handleRequest(req, res) {
         return;
     }
 
+    if (pathname === '/api/favorite' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+        req.on('end', async () => {
+            try {
+                const { imagePath } = JSON.parse(body);
+                const success = await favoriteImage(imagePath);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success }));
+            } catch (error) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid request' }));
+            }
+        });
+        return;
+    }
+
     // Serve images
     if (pathname.startsWith('/images/')) {
         const imageName = pathname.substring('/images/'.length);
@@ -196,17 +231,20 @@ Directories:
 - Images:    ${IMAGES_DIR}
 - Saved:     ${SAVED_DIR}
 - Discarded: ${DISCARDED_DIR}
+- Favorites: ${FAVORITES_DIR}
 
 Instructions:
 1. Add images to the 'images' folder
 2. Open http://localhost:${PORT} in your browser
 3. Swipe right to save, swipe left to discard
-4. Saved images go to 'saved' folder
-5. Discarded images go to 'discarded' folder
+4. Press up arrow or favorite button to copy to favorites
+5. Saved images go to 'saved' folder
+6. Discarded images go to 'discarded' folder
+7. Favorites are copied to 'favorites' folder
 
 Controls:
 - Drag or swipe to move cards
-- Click buttons or use arrow keys (← →)
+- Click buttons or use arrow keys (← → ↑)
 - Press Ctrl+Z to undo last action
 
 Press Ctrl+C to stop the server

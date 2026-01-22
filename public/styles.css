@@ -98,6 +98,10 @@ header h1 {
     animation: swipeRight 0.5s ease-out forwards;
 }
 
+.card.swipe-up {
+    animation: swipeUp 0.5s ease-out forwards;
+}
+
 @keyframes swipeLeft {
     to {
         transform: translateX(-150%) rotate(-30deg);
@@ -109,6 +113,21 @@ header h1 {
     to {
         transform: translateX(150%) rotate(30deg);
         opacity: 0;
+    }
+}
+
+@keyframes swipeUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-100px) scale(0.9);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
     }
 }
 
@@ -141,35 +160,63 @@ header h1 {
     opacity: 1;
 }
 
+.card-overlay.favorite {
+    background: rgba(255, 193, 7, 0.7);
+    color: white;
+    opacity: 1;
+}
+
 .swipe-hint {
     position: absolute;
     width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    padding: 20px;
     pointer-events: none;
     z-index: 10;
     opacity: 0.7;
 }
 
-.hint-left, .hint-right {
+.hint-up {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
     background: rgba(255, 255, 255, 0.9);
     padding: 10px 15px;
     border-radius: 10px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #333;
+    color: #ffc107;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .hint-left {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
     color: #f44336;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .hint-right {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    justify-self: end;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
     color: #4caf50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .controls {
@@ -207,6 +254,10 @@ header h1 {
 
 .save-btn {
     color: #4caf50;
+}
+
+.favorite-btn {
+    color: #ffc107;
 }
 
 .undo-btn {
@@ -272,7 +323,12 @@ header h1 {
         height: 50px;
     }
 
-    .hint-left, .hint-right {
+    .favorite-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    .hint-left, .hint-right, .hint-up {
         font-size: 0.75rem;
         padding: 8px 12px;
     }

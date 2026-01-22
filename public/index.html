@@ -13,6 +13,7 @@
             <div class="stats">
                 <span class="stat">Saved: <strong id="savedCount">0</strong></span>
                 <span class="stat">Discarded: <strong id="discardedCount">0</strong></span>
+                <span class="stat">Favorites: <strong id="favoritesCount">0</strong></span>
                 <span class="stat">Remaining: <strong id="remainingCount">0</strong></span>
             </div>
         </header>
@@ -20,6 +21,7 @@
         <div class="swipe-container">
             <div id="swipeHint" class="swipe-hint">
                 <div class="hint-left">← Swipe left to discard</div>
+                <div class="hint-up">↑ Swipe up to favorite</div>
                 <div class="hint-right">Swipe right to save →</div>
             </div>
 
@@ -47,6 +49,11 @@
             <button id="undoBtn" class="control-btn undo-btn" title="Undo last action">
                 <svg width="40" height="40" viewBox="0 0 40 40">
                     <path d="M 20 10 A 10 10 0 1 0 20 30 L 25 25" stroke="currentColor" fill="none" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <button id="favoriteBtn" class="control-btn favorite-btn" title="Add to favorites (or press ↑)">
+                <svg width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M 20 8 L 24 16 L 33 17.5 L 26.5 23.5 L 28 33 L 20 28.5 L 12 33 L 13.5 23.5 L 7 17.5 L 16 16 Z" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
             <button id="saveBtn" class="control-btn save-btn" title="Save (or press →)">

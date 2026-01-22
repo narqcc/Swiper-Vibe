@@ -4,15 +4,16 @@ A beautiful, responsive web application that allows you to swipe through images 
 
 ## Features
 
-- **Intuitive Swipe Interface**: Swipe right to save, left to discard
+- **Intuitive Swipe Interface**: Swipe right to save, left to discard, up to favorite
+- **Favorites System**: Copy images to a favorites folder without moving them
 - **Multiple Input Methods**:
   - Touch gestures (mobile)
   - Mouse drag (desktop)
   - Button clicks
-  - Keyboard arrows (← →)
+  - Keyboard arrows (← → ↑)
 - **Undo Functionality**: Made a mistake? Press Ctrl+Z or click the undo button
 - **Visual Feedback**: See real-time overlays as you swipe
-- **Statistics Tracking**: Keep track of saved, discarded, and remaining images
+- **Statistics Tracking**: Keep track of saved, discarded, favorited, and remaining images
 - **Card Stack Effect**: Beautiful card stacking animation
 - **Responsive Design**: Works perfectly on mobile and desktop
 - **Smooth Animations**: Fluid transitions and effects
@@ -28,6 +29,7 @@ Swiper-Vibe/
 ├── images/             # Put your images here
 ├── saved/              # Saved images will be moved here
 ├── discarded/          # Discarded images will be moved here
+├── favorites/          # Favorite images will be copied here
 ├── server.js           # Node.js server
 ├── package.json        # Project configuration
 ├── default.nix         # Nix package definition
@@ -118,8 +120,9 @@ IMAGE_SWIPER_DATA_DIR=/path/to/your/images image-swiper
 4. **Start swiping!**
    - **Swipe/Drag Right**: Save the image (moves to `saved` folder)
    - **Swipe/Drag Left**: Discard the image (moves to `discarded` folder)
-   - **Click Buttons**: Use the ✓ and ✗ buttons
-   - **Keyboard**: Press → (right arrow) to save, ← (left arrow) to discard
+   - **Swipe/Drag Up**: Favorite the image (copies to `favorites` folder, stays in `images`)
+   - **Click Buttons**: Use the ✓, ✗, and ★ buttons
+   - **Keyboard**: Press → to save, ← to discard, ↑ to favorite
    - **Undo**: Press Ctrl+Z or click the undo button
 
 ## How It Works
@@ -136,6 +139,7 @@ IMAGE_SWIPER_DATA_DIR=/path/to/your/images image-swiper
 - REST API endpoints for:
   - Getting list of images
   - Moving images to saved/discarded folders
+  - Copying images to favorites folder
   - Undo functionality
 - Serves static files and images
 
@@ -143,6 +147,7 @@ IMAGE_SWIPER_DATA_DIR=/path/to/your/images image-swiper
 - Images start in the `images` folder
 - Swiping right moves them to `saved`
 - Swiping left moves them to `discarded`
+- Swiping up copies them to `favorites` (image stays in place)
 - Undo moves them back to `images`
 
 ## Customization
@@ -170,6 +175,9 @@ color: #4caf50;
 
 /* Discard color (red) */
 color: #f44336;
+
+/* Favorite color (yellow/gold) */
+color: #ffc107;
 ```
 
 ## Browser Compatibility
@@ -183,9 +191,11 @@ color: #f44336;
 
 - **Performance**: The app loads only 3 cards at a time for smooth performance
 - **Undo**: You can undo multiple actions in sequence
+- **Favorites**: Favoriting copies the image without removing it, so you can save/discard it later
 - **Keyboard Shortcuts**:
   - `→` Save current image
   - `←` Discard current image
+  - `↑` Favorite current image
   - `Ctrl+Z` Undo last action
 - **Mobile**: Swipe gestures work naturally on touch devices
 

@@ -34,6 +34,7 @@
               mkdir -p $out/lib/image-swiper/images
               mkdir -p $out/lib/image-swiper/saved
               mkdir -p $out/lib/image-swiper/discarded
+              mkdir -p $out/lib/image-swiper/favorites
 
               # Create wrapper script
               cat > $out/bin/image-swiper <<EOF
@@ -47,6 +48,7 @@
               mkdir -p "\$DATA_DIR/images"
               mkdir -p "\$DATA_DIR/saved"
               mkdir -p "\$DATA_DIR/discarded"
+              mkdir -p "\$DATA_DIR/favorites"
 
               # Create temporary directory with symlinks
               TEMP_DIR=\$(mktemp -d)
@@ -61,6 +63,7 @@
               ln -s "\$DATA_DIR/images" "\$TEMP_DIR/images"
               ln -s "\$DATA_DIR/saved" "\$TEMP_DIR/saved"
               ln -s "\$DATA_DIR/discarded" "\$TEMP_DIR/discarded"
+              ln -s "\$DATA_DIR/favorites" "\$TEMP_DIR/favorites"
 
               # Run the server
               cd "\$TEMP_DIR"

@@ -4,6 +4,7 @@ class ImageSwiper {
         this.currentIndex = 0;
         this.savedCount = 0;
         this.discardedCount = 0;
+        this.favoritesCount = 0;
         this.history = [];
 
         this.isDragging = false;
@@ -132,7 +133,11 @@ class ImageSwiper {
         const overlay = card.querySelector('.card-overlay');
         overlay.className = 'card-overlay';
 
-        if (Math.abs(this.currentX) > 50) {
+        // Check for upward swipe (favorite)
+        if (this.currentY < -50 && Math.abs(this.currentX) < Math.abs(this.currentY)) {
+            overlay.classList.add('favorite');
+            overlay.textContent = 'FAVORITE';
+        } else if (Math.abs(this.currentX) > 50) {
             if (this.currentX > 0) {
                 overlay.classList.add('save');
                 overlay.textContent = 'SAVE';
@@ -153,7 +158,10 @@ class ImageSwiper {
 
         const threshold = 100;
 
-        if (Math.abs(this.currentX) > threshold) {
+        // Check for upward swipe (favorite)
+        if (this.currentY < -threshold && Math.abs(this.currentX) < Math.abs(this.currentY)) {
+            this.favoriteCard(card);
+        } else if (Math.abs(this.currentX) > threshold) {
             if (this.currentX > 0) {
                 this.swipeCard(card, 'right');
             } else {
@@ -208,6 +216,42 @@ class ImageSwiper {
         }, 500);
     }
 
+    async favoriteCard(card) {
+        const imagePath = card.dataset.image;
+
+        // Add animation class
+        card.classList.add('swipe-up');
+
+        // Send to server to copy to favorites
+        await this.saveFavorite(imagePath);
+
+        // Update count
+        this.favoritesCount++;
+        this.updateStats();
+
+        // Reset card position after animation
+        setTimeout(() => {
+            card.classList.remove('swipe-up');
+            card.style.transform = '';
+            const overlay = card.querySelector('.card-overlay');
+            overlay.className = 'card-overlay';
+        }, 500);
+    }
+
+    async saveFavorite(imagePath) {
+        try {
+            await fetch('/api/favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ imagePath })
+            });
+        } catch (error) {
+            console.error('Error saving favorite:', error);
+        }
+    }
+
     async saveDecision(imagePath, direction) {
         try {
             await fetch('/api/swipe', {
@@ -254,6 +298,7 @@ class ImageSwiper {
     updateStats() {
         document.getElementById('savedCount').textContent = this.savedCount;
         document.getElementById('discardedCount').textContent = this.discardedCount;
+        document.getElementById('favoritesCount').textContent = this.favoritesCount;
         document.getElementById('remainingCount').textContent =
             Math.max(0, this.images.length - this.currentIndex);
     }
@@ -270,6 +315,11 @@ class ImageSwiper {
             if (topCard) this.swipeCard(topCard, 'left');
         });
 
+        document.getElementById('favoriteBtn').addEventListener('click', () => {
+            const topCard = this.cardStack.querySelector('.card');
+            if (topCard) this.favoriteCard(topCard);
+        });
+
         document.getElementById('undoBtn').addEventListener('click', () => {
             this.undo();
         });
@@ -282,6 +332,9 @@ class ImageSwiper {
             } else if (e.key === 'ArrowLeft') {
                 const topCard = this.cardStack.querySelector('.card');
                 if (topCard) this.swipeCard(topCard, 'left');
+            } else if (e.key === 'ArrowUp') {
+                const topCard = this.cardStack.querySelector('.card');
+                if (topCard) this.favoriteCard(topCard);
             } else if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
                 this.undo();
             }
