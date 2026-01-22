@@ -30,10 +30,61 @@ Swiper-Vibe/
 ├── discarded/          # Discarded images will be moved here
 ├── server.js           # Node.js server
 ├── package.json        # Project configuration
+├── default.nix         # Nix package definition
+├── shell.nix           # Nix development shell
+├── flake.nix           # Nix flake for modern Nix
 └── README.md           # This file
 ```
 
 ## Installation
+
+### Option 1: Using Nix (Recommended)
+
+If you have Nix installed, you can use this package directly without any other dependencies!
+
+#### Using Nix Flakes (Modern):
+
+```bash
+# Run directly without installing
+nix run github:narqcc/Swiper-Vibe/claude/image-swipe-app-7MzvN
+
+# Or install to your profile
+nix profile install github:narqcc/Swiper-Vibe/claude/image-swipe-app-7MzvN
+
+# Then run
+image-swiper
+```
+
+#### Using traditional Nix:
+
+```bash
+# Build the package
+nix-build
+
+# Run the result
+./result/bin/image-swiper
+```
+
+#### Development with Nix:
+
+```bash
+# Enter development shell (with Nix Flakes)
+nix develop
+
+# Or with traditional Nix
+nix-shell
+
+# Then run the server
+npm start
+```
+
+**Data Directory**: When using the Nix package, your images are stored in `~/.local/share/image-swiper/`. You can customize this by setting the `IMAGE_SWIPER_DATA_DIR` environment variable:
+
+```bash
+IMAGE_SWIPER_DATA_DIR=/path/to/your/images image-swiper
+```
+
+### Option 2: Traditional Node.js
 
 1. **Prerequisites**: Make sure you have Node.js installed (version 12 or higher)
 
